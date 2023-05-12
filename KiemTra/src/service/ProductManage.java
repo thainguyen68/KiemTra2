@@ -265,7 +265,7 @@ public class ProductManage implements Manage<Product> {
             String data;
             while ((data = bufferedReader.readLine()) != null) {
                 String[] strings = data.split(",");
-                Product product = new Product(Integer.parseInt(strings[0]), strings[1], Double.parseDouble(strings[3]),Integer.parseInt(strings[4]), strings[5]);
+                Product product = new Product(Integer.parseInt(strings[0]), strings[1], Double.parseDouble(strings[2]),Integer.parseInt(strings[3]), strings[4]);
                 productList.add(product);
             }
         } catch (IOException ioException) {
