@@ -49,7 +49,7 @@ public class MainRun {
                     productManage.searchByPrice();
                     break;
                 case 7:
-                    productManage.read();
+                    productManage.read(productManage.getProductList());
                     break;
                 case 8:
                     productManage.write(productManage.getProductList());

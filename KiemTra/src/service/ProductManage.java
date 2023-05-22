@@ -15,7 +15,8 @@ public class ProductManage implements Manage<Product> {
 
     public ProductManage(Scanner scanner) {
         this.scanner = scanner;
-        productAdd();
+//        productList = read();
+//        productAdd();
     }
 
     public List<Product> getProductList() {
@@ -41,23 +42,24 @@ public class ProductManage implements Manage<Product> {
     public Product create() {
         System.out.println("Thêm sản phẩm mới: ");
         System.out.println("Mã sản phẩm:");
-        int id = -1;
+        int idInput ;
+        int id = 0;
         try {
-            id = Integer.parseInt(scanner.nextLine());
-            boolean check = true;
-            do {
-                for (Product p : productList){
-                    if (id!=p.getId()){
-                        check = true;
-                    }
-                    else {
-                        check = false;
-                    }
+            idInput = Integer.parseInt(scanner.nextLine());
+            for (Product p: productList){
+                if (idInput != p.getId()) {
+                    id = idInput;
+                    break;
                 }
-            }while (!check);
+                else {
+                    System.out.println("trùng rồi");
+                    return null;
+                }
+            }
         } catch (NumberFormatException e) {
-            System.out.println("Hãy nhập số !");
+            System.out.println("Hãy nhập số!");
         }
+
         System.out.println("Tên sản phẩm mới:");
         String name = scanner.nextLine();
         System.out.println("Giá sản phẩm: ");
@@ -81,6 +83,24 @@ public class ProductManage implements Manage<Product> {
         displayAll();
         Product product = getById();
         if (product != null) {
+            System.out.println("Đổi mã sản phẩm: ");
+           int id ;
+            try {
+                id = Integer.parseInt(scanner.nextLine());
+                for (Product p: productList){
+                    if (id != p.getId()) {
+                        product.setId(id);
+                        break;
+                    }
+                    else {
+                        System.out.println("trùng rồi");
+                        return null;
+                    }
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Hãy nhập số!");
+            }
+
             System.out.println("Đổi tên sản phẩm: ");
             String name = scanner.nextLine();
             if (!name.equals("")) {
@@ -126,9 +146,9 @@ public class ProductManage implements Manage<Product> {
         System.out.println("y: có");
         System.out.println("n: Không");
         String choose = scanner.nextLine();
-        if (choose.equals("y") && product != null){
-                productList.remove(product);
-        }else {
+        if (choose.equals("y") && product != null) {
+            productList.remove(product);
+        } else {
             return null;
         }
         return product;
@@ -165,8 +185,7 @@ public class ProductManage implements Manage<Product> {
 
     @Override
     public void displayAll() {
-        System.out.printf("%-15s%-17s%-20s%-20s%s",
-                "Mã", "Tên", "Giá", "Số Lượng", "Mô tả\n");
+        System.out.printf("%-15s%-17s%-20s%-20s%s", "Mã", "Tên", "Giá", "Số Lượng", "Mô tả\n");
         for (Product p : productList) {
             p.display();
         }
@@ -194,10 +213,8 @@ public class ProductManage implements Manage<Product> {
                 case 2:
                     sortByPriceHighTolLow();
                     break;
-                case 3:
-                  break;
             }
-        } while (chooseSort != 0);
+        } while (chooseSort != 3);
     }
 
     public void sortByPriceLowToHigh() {
@@ -234,15 +251,13 @@ public class ProductManage implements Manage<Product> {
         for (Product p : productList) {
             if (p.getPrice() == max) {
                 System.out.println("Sản phẩm có giá cao nhất:");
-                System.out.printf("%-15s%-17s%-20s%-20s%s",
-                        "Mã", "Tên", "Giá", "Số Lượng", "Mô tả\n");
+                System.out.printf("%-15s%-17s%-20s%-20s%s", "Mã", "Tên", "Giá", "Số Lượng", "Mô tả\n");
                 p.display();
             }
         }
     }
 
-    public void write( List<Product> productList) {
-       ;
+    public void write(List<Product> productList) {
         File file = new File("E:\\KiemTra2\\KiemTra\\src\\data\\Product.txt");
         try {
             FileWriter fileWriter = new FileWriter(file);
@@ -258,14 +273,13 @@ public class ProductManage implements Manage<Product> {
 
     }
 
-    public List<Product> read() {
+    public List<Product> read( List<Product> productList) {
         File file = new File("E:\\KiemTra2\\KiemTra\\src\\data\\Product.txt");
-        List<Product> productList = new ArrayList<>();
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             String data;
             while ((data = bufferedReader.readLine()) != null) {
                 String[] strings = data.split(",");
-                Product product = new Product(Integer.parseInt(strings[0]), strings[1], Double.parseDouble(strings[2]),Integer.parseInt(strings[3]), strings[4]);
+                Product product = new Product(Integer.parseInt(strings[0]), strings[1], Double.parseDouble(strings[2]), Integer.parseInt(strings[3]), strings[4]);
                 productList.add(product);
             }
         } catch (IOException ioException) {
